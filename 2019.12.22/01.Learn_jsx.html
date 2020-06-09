@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- React使用需要引入下列三个库: 1. react库； 2.react-dom库； 3. babel编译库 -->
+
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+    <title>React</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="app1"></div>
+    <div id="app2"></div>
+    <div id="app3"></div>
+    <div id="app4"></div>
+    <div id="app5"></div>
+</body>
+
+</html>
+
+
+
+<script type="text/babel">
+
+    /**
+     * React中有两种jsx的书写方式: 1.利用babel 
+     * 
+    */
+
+    const mytitle = 'hello react'
+    const myid = 'chalicelee'
+
+    // 直接创建标签
+    const vDom = <h1 id={myid.toUpperCase()}>{mytitle.toLowerCase()}</h1>
+
+    ReactDOM.render(vDom, document.getElementById('app'))
+
+
+
+    const mytitle1 = 'hello react'
+    const myid1 = 'chalicelee'
+
+    // 使用React.createElement创建标签
+    let elementDom = React.createElement('h2', { id: mytitle1.toLowerCase() }, myid1.toUpperCase())
+    ReactDOM.render(elementDom, document.getElementById('app1'))
+</script>
+
+
+<script type="text/babel">
+
+    // 2. 使用 {  } 编译
+    const names = ['jquery', 'zepto', 'vue', 'react', 'angular']
+    const ul = (
+        <ul>
+            {
+                names.map((item, index) => <li key={index}>{item}</li>)
+            }
+        </ul>
+    )
+
+    ReactDOM.render(ul, document.getElementById('app2'))
+
+    // 函数调用
+    function formatName(user) {
+        return user.firstName + ' ' + user.lastName;
+    }
+
+    const user = {
+        firstName: 'Harper',
+        lastName: 'Perez'
+    };
+
+    const element = (
+        <h1>
+            Hello, {formatName(user)}!
+        </h1>
+    );
+
+    ReactDOM.render(element, document.getElementById('app3'))
+
+
+    // 函数里面返回标签
+    function getGreeting(user) {
+        if (user) {
+            return <h1 className="hello">Hello, {formatName1(user)}!</h1>;
+        }
+        return <h1 tableIndex='0'>Hello, Stranger.</h1>;
+    }
+
+    function formatName1(params) {
+        return params
+    }
+
+    const element1 = getGreeting('react');
+
+    ReactDOM.render(element1, document.getElementById('app4'))
+
+
+    // 直接渲染标签
+    const element2 = (
+        <div>
+            <h1>Hello!</h1>
+            <h2>Good to see you here.</h2>
+        </div>
+    );
+
+    ReactDOM.render(element2, document.getElementById('app5'))
+
+    /**
+     * 警告:
+
+        因为 JSX 的特性更接近 JavaScript 而不是 HTML , 所以 React DOM 使用 camelCase 小驼峰命名 来定义属性的名称，而不是使用 HTML 的属性名称。
+    */
+    
+
+</script>

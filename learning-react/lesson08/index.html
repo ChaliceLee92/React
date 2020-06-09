@@ -1,0 +1,66 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 15:20:19
+ * @lastTime: 2019-05-02 19:06:12
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>收集表单数据</title>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+<script type="text/babel">
+    class FormInput extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          pwd:'',
+        }
+        this.handleSubmitForm = this.handleSubmitForm.bind(this)
+        this.passwordVal = this.passwordVal.bind(this)
+      }
+      
+      handleSubmitForm(e){
+        e.preventDefault()   // 阻止事件的默认行为
+        const userName = this.userName.value
+        console.log(userName);
+
+      }
+
+      passwordVal(e){
+        const pwd = e.target.value
+        this.setState( { pwd } )
+      }
+
+      render() {
+        return (
+          <form action='/text' onSubmit={ this.handleSubmitForm }>
+            用户名：<input type='text' ref={ val => this.userName = val } />  // 非受控组件获取表单数据
+            密码：<input type='password' value={ this.state.pwd } onChange={ this.passwordVal }  /> // 受控组件获取表单数据
+            <input type='submit' value='登录' />
+          </form>
+        );
+      }
+    }
+    
+    FormInput.propTypes = {
+    
+    };
+    
+    const element = <FormInput />
+    ReactDOM.render(element,document.getElementById('app'))
+</script>

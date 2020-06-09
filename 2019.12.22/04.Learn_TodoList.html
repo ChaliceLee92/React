@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+    <title>Todo List</title>
+</head>
+<style>
+    .active {
+        color: brown;
+    }
+</style>
+
+<body>
+    <div id="app"></div>
+</body>
+
+</html>
+<script type="text/babel">
+
+    class App extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                Todos: ['吃饭', '睡觉']
+            }
+            this.handleAddValue = this.handleAddValue.bind(this)
+        }
+        render() {
+            const { Todos } = this.state
+            return (
+                <div>
+                    <h1>simple Todo List</h1>
+                    <TodoAdd count={Todos.length} handleAddValue={this.handleAddValue} />
+                    <TodoList Todos={Todos} />
+                </div>
+            );
+        }
+
+        // 接收子组件传递的参数用于更新视图
+        handleAddValue(val) {
+            const { Todos } = this.state
+            // 必须调用this.setState() 来达到更新 
+            this.setState({
+                Todos: [...Todos, val]
+            })
+        }
+    }
+
+
+    /**
+        添加事件组件: 主要负责事件添加 并检测是否合法
+    */
+    class TodoAdd extends React.Component {
+        // 构造函数,组件创建的时候触发
+        constructor(props) {
+            super(props);
+            this.handleClickValue = this.handleClickValue.bind(this)
+        }
+
+        render() {
+            return (
+                <div>
+                    <input ref={val => this.inputVal = val} />
+                    <button onClick={this.handleClickValue}>添加事件 #{this.props.count}</button>
+                </div>
+            );
+        }
+        handleClickValue() {
+            const inputVal = this.inputVal.value.trim()
+            if (!inputVal) {
+                console.log("请输入数据");
+            } else {
+                // 通知函数通知父组件并传递值
+                this.props.handleAddValue(inputVal)
+                this.inputVal.value = ''
+            }
+        }
+    }
+
+    // 设置组件传入的值类型与是否必传
+    TodoAdd.propTypes = {
+        count: PropTypes.number.isRequired,
+        handleAddValue: PropTypes.func.isRequired,
+    }
+
+
+    /**
+        列表组件: 主要负责数据展示
+    */
+    class TodoList extends React.Component {
+        constructor(props) {
+            super(props)
+        }
+        render() {
+            const { Todos } = this.props
+            return (
+                <div>
+                    <ul>
+                        {
+                            Todos.map(
+                                (item, index) => <ItemLi item={item} index={index} key={index}></ItemLi>
+                            )
+                        }
+                    </ul>
+                </div >
+            );
+        }
+    }
+    // 设置组件传入的值类型与是否必传
+    TodoList.propTypes = {
+        Todos: PropTypes.array.isRequired,
+    }
+
+    /**
+        item 组件
+    */
+    class ItemLi extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state = {
+                active: []
+            }
+            this.handleSelect = this.handleSelect.bind(this)
+        }
+
+
+        render() {
+            const { item, index } = this.props
+
+            return (
+                <li className={this.state.active.includes(index) ? 'active' : '' } onClick={() => { this.handleSelect(index) }}> {item} </li>
+            );
+        }
+
+        handleSelect(val) {
+            this.setState(({ active }) => ({
+                active: active.includes(val) ? active.filter(item => item !== val) : [...active, val]
+            }))
+        }
+    }
+
+    ItemLi.propTypes = {
+        item: PropTypes.string.isRequired,
+    }
+
+
+
+    const app = <App />
+    ReactDOM.render(app, document.getElementById('app'))
+
+
+
+
+    /**
+        在这个案例里面，需要注意的问题有：
+
+                        其他组件都要共用的数据放在父组件里面，通过父组件把值传递给子组件
+                        状态在放在哪里，那么更新状态的行为就应该在那里
+                        定义好更新状态的行为后，通过传值，把这个函数传递出去
+    
+    */
+</script>

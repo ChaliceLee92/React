@@ -1,0 +1,26 @@
+#App{
+
+}
+
+.App_title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+}
+.App_main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.RouteLink{
+    width: 10%;
+}
+.RouteLink a{
+    display: block;
+    text-align: center;
+    margin: 20px;
+}
+.activeName{
+    color: brown;
+}

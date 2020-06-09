@@ -1,0 +1,77 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 19:08:00
+ * @lastTime: 2019-05-02 20:10:27
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>React 生命周期</title>
+</head>
+
+<body>
+  <div id="app"></div>
+</body>
+
+</html>
+<script type="text/babel">
+
+  class MyComponent extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        opacity: 1
+      }
+      this.removerComponent = this.removerComponent.bind(this)
+    }
+
+    componentDidMount() {     // 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过this.getDOMNode()来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用setTimeout, setInterval或者发送AJAX请求等操作(防止异步操作阻塞UI)。
+      this.timer = setInterval(() => {     //  注意， 定时器中的this指向的是window 。但是使用箭头函数可以解决这个问题，否则要改变this指向
+      console.log("定时器");
+        let { opacity } = this.state  
+          opacity -= 0.1
+        if(opacity <= 0){
+          opacity = 1
+        }
+        this.setState({ opacity })
+      }, 200);   // 注意， 当用户点击删除节点的时候需要把定时器也关闭，否则将持续执行，这被称为内存泄露
+    }
+    
+    componentWillUnmount(){   // 生命周期函数， 在组件被移除之前进行一些操作
+      clearInterval(this.timer)
+    }
+
+
+    removerComponent(){
+      ReactDOM.unmountComponentAtNode(document.getElementById('app'))  // 从DOM元素中移除已挂载的React组件，清除它的事件处理器和state
+    }
+
+    render() {
+      const { opacity } = this.state
+      return (
+        <div>
+          <h1 style={ { opacity } }>学不动了，不想努力了</h1>
+          <button onClick={ this.removerComponent }>over</button>
+        </div>
+      )
+    }
+  }
+
+  
+  
+
+  ReactDOM.render(<MyComponent />,document.getElementById('app'))
+ 
+</script>

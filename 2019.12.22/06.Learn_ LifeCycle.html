@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+    <title>React 生命周期</title>
+</head>
+
+<body>
+    <div id="app"></div>
+</body>
+
+</html>
+<script type="text/babel">
+
+    /**
+        React 组件生命周期: 
+                        组件的生命周期可分成三个状态(阶段)：
+                                                Mounting：已插入真实 DOM（挂载阶段）
+                                                Updating：正在被重新渲染(更新阶段)
+                                                Unmounting：已移出真实 DOM(卸载阶段)
+
+                        React16废弃的三个生命周期函数: 
+                                                    componentWillMount
+                                                    componentWillReceiveProps
+                                                    componentWillUpdate
+                                            
+                                            注意:  目前在16版本中componentWillMount，componentWillReceiveProps，componentWillUpdate并未完全删除这三个生命周期函数，而且新增了UNSAFE_componentWillMount，UNSAFE_componentWillReceiveProps，UNSAFE_componentWillUpdate三个函数，官方计划在17版本完全删除这三个函数，只保留UNSAVE_前缀的三个函数，目的是为了向下兼容，但是对于开发者而言应该尽量避免使用他们，而是使用新增的生命周期函数替代它们
+
+                        取而代之的是两个新的生命周期函数： 
+                                                    static getDerivedStateFromProps
+                                                    getSnapshotBeforeUpdate
+
+
+
+                        挂载阶段(只会触发一次): 
+                                            constructor: 
+                                                        组件构造函数，第一个被执行,如果没有显示定义它，我们会拥有一个默认的构造函数,如果显示定义了构造函数，我们必须在构造函数第一行执行super(props)，否则我们无法在构造函数里拿到this对象，这些都属于ES6的知识,在构造函数里面我们一般会做两件事： 1. 初始化state对象(禁止在构造函数中调用setState，可以直接给state设置初始值) ; 2. 给自定义方法绑定this
+                                            
+                                            static getDerivedStateFromProps(nextProps, prevState):
+                                                        一个静态方法，所以不能在这个函数里面使用this，这个函数有两个参数props和state，分别指接收到的新参数和当前的state对象，这个函数会返回一个对象用来更新当前的state对象，如果不需要更新可以返回null, 该函数会在挂载时，接收到新的props，调用了setState和forceUpdate时被调用,这个方法就是为了取代之前的componentWillMount、componentWillReceiveProps和componentWillUpdate当我们接收到新的属性想去修改我们state，可以使用getDerivedStateFromProps
+
+                                            render:
+                                                    React中最核心的方法，一个组件中必须要有这个方法!。
+                                                    返回的类型有以下几种：
+                                                                    1. 原生的DOM，如div
+                                                                    2. Fragment（片段 , React16新增）
+                                                                    3. Portals（插槽 , React16新增）
+                                                                    4. 字符串和数字，被渲染成text节点
+                                                                    5. Boolean和null，不会渲染任何东西
+                                                    render函数是纯函数，里面只做一件事，就是返回需要渲染的东西，不应该包含其它的业务逻辑，如数据请求，对于这些业务逻辑请移到componentDidMount和componentDid Update中
+
+                                            componentDidMount:
+                                                            组件挂载之后调用，此时我们可以获取到DOM节点并操作，比如对canvas，svg的操作，服务器请求，订阅都可以写在这个里面，但是记得在componentWillUnmount中取消订阅，在componentDidMount中调用setState会触发一次额外的渲染，多调用了一次render函数，但是用户对此没有感知，因为它是在浏览器刷新屏幕前执行的，但是我们应该在开发中避免它，因为它会带来一定的性能问题，我们应该在constructor中初始化我们的state对象，而不应该在componentDidMount调用state方法
+
+                                            componentWillMount/UNSAVE_componentWillMount （这两个不建议使用了）
+
+
+                        更新阶段:
+                                更新阶段，当组件的props改变了，或组件内部调用了setState或者forceUpdate发生，会发生多次。
+                                这个阶段的生命周期函数调用如下：
+                                                        componentWillReceiveProps/UNSAFE_componentWillReceiveProps(这两个不推荐使用了)
+
+                                                        getDerivedStateFromProps: 
+                                                                                记住在更新阶段，无论我们接收到新的属性，调用了setState还是调用了forceUpdate，这个方法都会被调用
+
+                                                        shouldComponentUpdate(nextProps, nextState):
+                                                                                有两个参数nextProps和nextState，表示新的属性和变化之后的state，返回一个布尔值，true表示会触发重新渲染，false表示不会触发重新渲染，默认返回true ， 注意当我们调用forceUpdate并不会触发此方法 ， 因为默认是返回true，也就是只要接收到新的属性和调用了setState都会触发重新的渲染，这会带来一定的性能问题，所以我们需要将this.props与nextProps以及this.state与nextState进行比较来决定是否返回false，来减少重新渲染
+
+                                                        componentWillUpdate/UNSAFE_componentWillUpdate（这两个不推荐使用了）
+
+                                                        render:
+                                                                更新阶段也会触发。
+
+                                                        getSnapshotBeforeUpdate(prevProps, prevState): 
+                                                                这个方法在render之后，componentDidUpdate之前调用，有两个参数prevProps和prevState，表示之前的属性和之前的state，这个函数有一个返回值，会作为第三个参数传给componentDidUpdate，如果你不想要返回值，请返回null，不写的话控制台会有警告,还有这个方法一定要和componentDidUpdate一起使用，否则控制台也会有警告(这个方法是用来代替componentWillUpdate/UNSAVE_componentWillUpdate)
+
+                                                        componentDidUpdate(prevProps, prevState, snapshot):
+                                                                该方法在getSnapshotBeforeUpdate方法之后被调用，有三个参数prevProps，prevState，snapshot，表示之前的props，之前的state，和snapshot。第三个参数是getSnapshotBeforeUpdate返回的在这个函数里我们可以操作DOM，和发起服务器请求，还可以setState，但是注意一定要用if语句控制，否则会导致无限循环
+
+                        卸载阶段:
+                                卸载阶段，当我们的组件被卸载或者销毁了,这个阶段的生命周期函数只有一个：
+                                    componentWillUnmount
+                                当我们的组件被卸载或者销毁了就会调用，我们可以在这个函数里去清除一些定时器，取消网络请求，清理无效的DOM元素等垃圾清理工作注意不要在这个函数里去调用setState，因为组件不会重新渲染了
+
+
+                        查看 React v16.4 生命周期：
+                                                http://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/
+    
+    */
+
+
+
+    class MyComponent extends React.Component {
+
+        // constructor 构造函数 是每当组件被创建的时候 即触发
+        constructor(props) {
+            super(props);
+            this.state = {
+                opacity: 1,
+                isScrollingDown: false,
+                lastRow: null
+            }
+            this.removerComponent = this.removerComponent.bind(this)
+        }
+
+        componentDidMount() {     // 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过this.getDOMNode()来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用setTimeout, setInterval或者发送AJAX请求等操作(防止异步操作阻塞UI)。
+            this.timer = setInterval(() => {     //  注意， 定时器中的this指向的是window 。但是使用箭头函数可以解决这个问题，否则要改变this指向
+                console.log("定时器");
+                let { opacity } = this.state
+                opacity -= 0.1
+                if (opacity <= 0) {
+                    opacity = 1
+                }
+                this.setState({ opacity })
+            }, 200);
+        }
+
+        // 函数会在挂载时，接收到新的props，调用了setState和forceUpdate时被调用
+        static getDerivedStateFromProps(nextProps, prevState) {
+            // console.log('%c 🍇 prevState: ', 'font-size:20px;background-color: #6EC1C2;color:#fff;', prevState);
+            // console.log('%c 🍋 nextProps: ', 'font-size:20px;background-color: #B03734;color:#fff;', nextProps);
+            if (nextProps.currentRow !== prevState.lastRow) {
+                return {
+                    isScrollingDown:
+                        nextProps.currentRow > prevState.lastRow,
+                    lastRow: nextProps.currentRow
+                }
+            }
+            return null
+        }
+
+
+        shouldComponentUpdate(nextProps,nextState){
+            console.log('%c 🥒 nextState: ', 'font-size:20px;background-color: #F5CE50;color:#fff;', nextState);
+            console.log('%c 🌽 nextProps: ', 'font-size:20px;background-color: #3F7CFF;color:#fff;', nextProps);
+            // this.props与nextProps以及this.state与nextState进行比较来决定是否返回false，来减少重新渲染
+            return true  // 默认返回  true
+        }
+
+        componentWillUnmount() {   // 生命周期函数， 在组件被移除之前进行一些操作
+            clearInterval(this.timer) // 注意， 当用户点击删除节点的时候需要把定时器也关闭，否则将持续执行，这被称为内存泄露
+        }
+
+
+        removerComponent() {
+            ReactDOM.unmountComponentAtNode(document.getElementById('app'))  // 从DOM元素中移除已挂载的React组件，清除它的事件处理器和state
+        }
+
+        render() {
+            const { opacity } = this.state
+            return (
+                <div>
+                    <h1 style={{ opacity }}>富婆等等我...</h1>
+                    <button onClick={this.removerComponent}>over</button>
+                </div>
+            )
+        }
+    }
+
+
+
+
+    ReactDOM.render(<MyComponent />, document.getElementById('app'))
+
+</script>

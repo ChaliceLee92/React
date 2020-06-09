@@ -1,0 +1,125 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 13:29:17
+ * @lastTime: 2019-05-02 15:08:58
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>Todo List</title>
+</head>
+<style>
+  .active{
+    color: brown;
+  }
+</style>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+<script type="text/babel">
+  class App extends React.Component {
+    constructor(props){
+      super(props)
+      this.state = {
+        Todos:['吃饭','睡觉','打豆豆'],
+      }
+      this.handleAddValue = this.handleAddValue.bind(this)
+    }
+    render() {
+      const { Todos } = this.state
+      return (
+        <div>
+          <h1>simple Todo List</h1>
+          <TodoAdd count = { Todos.length } handleAddValue = { this.handleAddValue } />
+          <TodoList Todos = { Todos } />
+        </div>
+      );
+    }
+
+    handleAddValue(val){
+      const { Todos } = this.state
+      Todos.unshift(val)
+      this.setState( { Todos } )  // 必须调用this.setState() 来达到更新 
+    }
+  }
+  class TodoAdd extends React.Component {
+    constructor(props) {
+      super(props);
+      this.handleClickValue = this.handleClickValue.bind(this)
+    }
+    
+    render() {
+      return (
+        <div>
+          <input ref={ val => this.inputVal = val } />
+          <button onClick={this.handleClickValue}>添加事件 #{ this.props.count }</button>
+        </div>
+      );
+    }
+    handleClickValue(){
+      const inputVal = this.inputVal.value.trim()
+      if(!inputVal){
+        console.log("请输入数据");
+      }else{
+        this.props.handleAddValue(inputVal)
+        this.inputVal.value = ''
+      }
+    }
+  }
+
+  // 设置组件传入的值类型与是否必传
+  TodoAdd.propTypes = {
+    count:PropTypes.number.isRequired,
+    handleAddValue:PropTypes.func.isRequired,
+  }
+
+
+
+  class TodoList extends React.Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        active:null
+      }
+      this.handleLiValue = this.handleLiValue.bind(this)
+    }
+    
+    
+    render() {
+      const { Todos } = this.props
+      return (
+        <div>
+          <ul>
+            {
+              Todos.map((item,index) => <li key={ index } onClick={ () => this.handleLiValue(index) } className={this.state.active === index ? "active" : null } > { item } </li>)
+            }
+          </ul>
+        </div>
+      );
+    }
+
+    handleLiValue(idx){
+      const { active } = this.state
+      this.setState( { active: idx } )
+    }
+  }
+  // 设置组件传入的值类型与是否必传
+  TodoList.propTypes = {
+    Todos:PropTypes.array.isRequired,
+  }
+
+  const app = <App />
+  ReactDOM.render(app,document.getElementById('app'))
+</script>

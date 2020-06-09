@@ -1,0 +1,9 @@
+.CommentsInput{
+  display: flex;
+}
+.CommentsInput div:nth-child(1){
+  width: 50%;
+}
+.CommentsInput div:nth-child(2){
+  width: 50%;
+}

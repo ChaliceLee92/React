@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+    <title>收集表单数据</title>
+</head>
+
+<body>
+    <div id="app"></div>
+    <div id="app1"></div>
+</body>
+
+</html>
+<script type="text/babel">
+
+    /**
+        收集表单数据: 
+
+                1. 受控组件：表单项输入数据能自动收集成状态，例如vue的双向绑定
+                2. 非受控组件: 需要时手动读取表单输入框的数据
+    */
+
+
+    // 非受控组件 示例
+    class FormInput extends React.Component {
+        constructor(props) {
+            super(props)
+            this.handleSubmitForm = this.handleSubmitForm.bind(this)
+        }
+
+        handleSubmitForm(e) {
+            e.preventDefault()   // 阻止事件的默认行为
+            const userName = this.userName.value
+            const pwd = this.password.value
+            console.log('%c 🍗 pwd: ', 'font-size:20px;background-color: #33A5FF;color:#fff;', pwd);
+            console.log('%c 🥘 userName: ', 'font-size:20px;background-color: #EA7E5C;color:#fff;', userName);
+        }
+
+        render() {
+            return (
+                <div>
+                    <h1>非受控组件 示例</h1>
+                    <form action='/text' onSubmit={this.handleSubmitForm}>
+                        用户名：<input type='text' ref={val => this.userName = val} />  
+                        密码：<input type='password'  ref={pwa => this.password = pwa}/>
+                        <input type='submit' value='登录' />
+                    </form>
+                </div>
+            );
+        }
+    }
+
+    FormInput.propTypes = {
+
+    };
+
+    const element = <FormInput />
+    ReactDOM.render(element, document.getElementById('app'))
+</script>
+
+
+<script type="text/babel">
+
+    /**
+        收集表单数据: 
+
+                1. 受控组件：表单项输入数据能自动收集成状态，例如vue的双向绑定
+                2. 非受控组件: 需要时手动读取表单输入框的数据
+    */
+
+
+    // 受控组件 示例
+    class FormInput1 extends React.Component {
+        constructor(props) {
+            super(props)
+            this.state ={ 
+                userName: '',
+                password: ''
+            }
+            this.handleSubmitForm1 = this.handleSubmitForm1.bind(this)
+            this.onChangeName = this.onChangeName.bind(this)
+            this.onChangePwa = this.onChangePwa.bind(this)
+        }
+
+        handleSubmitForm1(e) {
+            e.preventDefault()   // 阻止事件的默认行为
+        }
+
+        onChangeName(e){
+            let Name = e.target.value
+            this.setState({
+                userName: Name
+            })
+        }
+
+        onChangePwa(e){
+            let pwa = e.target.value
+            this.setState({
+                password: pwa
+            })
+        }
+
+        submitForm1(){
+            const { userName , password } = this.state
+            console.log('%c 🥘 password: ', 'font-size:20px;background-color: #E41A6A;color:#fff;', password);
+            console.log('%c 🍒 userName: ', 'font-size:20px;background-color: #E41A6A;color:#fff;', userName);
+        }
+
+        render() {
+            return (
+                <div>
+                    <h1>受控组件 示例</h1>
+                    <form action='/text' onSubmit={this.handleSubmitForm1}>
+                        用户名：<input type='text' value={ this.state.userName }  onChange={this.onChangeName} />  
+                        密码：<input type='password' value={ this.state.password }   onChange={this.onChangePwa}/>
+                        <input type='submit' value='登录' onClick={this.submitForm1.bind(this)} />
+                    </form>
+                </div>
+            );
+        }
+    }
+
+    FormInput.propTypes = {
+
+    };
+
+    const element1 = <FormInput1 />
+    ReactDOM.render(element1, document.getElementById('app1'))
+</script>

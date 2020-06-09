@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>虚拟DOM 与 DOM diff算法</title>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+<script type="text/babel">
+  class HelloWorld extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        date: new Date()
+      }
+    }
+    
+    componentDidMount() {  // 初始化显示，执行一次
+      setInterval(() => {
+        this.setState({
+          date:new Date()
+        })
+      }, 1000);
+    }
+    
+
+
+    render() {
+      console.log("render()");
+      return (
+        <div>
+            hello React
+            <input type="text" />
+            <span> 
+              It is { this.state.date.toTimeString() }
+            </span>
+        </div>
+      )
+    }
+  }
+
+  ReactDOM.render(<HelloWorld /> , document.getElementById('app'))
+  
+  // React dom更新流程： 1、 创建虚拟dom（一般的js对象） 2.真实dom产生  3. 绘制界面显示  4.更新界面（在更新界面的时候，会根据diff算法比较新旧dom树，根据新旧dom树的差异达到局部更新界面）
+
+</script>

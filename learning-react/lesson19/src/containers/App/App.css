@@ -1,0 +1,47 @@
+body,html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.App_main {
+  background-color: #eee;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.App_main img {
+  width: 200px;
+  height: 200px;
+}
+
+.App_main h1 {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.text {
+  color: brown
+}
+
+.componentsList{
+  display: flex;
+  padding: 100px;
+}
+.componentsList .CommentsInput{
+  width: 50%;
+}
+.componentsList .CommentsList{
+  width: 50%;
+}

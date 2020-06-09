@@ -1,0 +1,27 @@
+.CommentsList h2{
+  margin: 0;
+  padding: 0;
+}
+.CommentsList ul{
+  margin: 0;
+  padding: 0;
+}
+.CommentsList ul li{
+  margin-top: 40px;
+}
+
+.CommentsList ul li div:nth-child(1){
+  width: 100%;
+  display: flex;
+}
+
+.CommentsList ul li div:nth-child(1) button{
+  margin-left: 60%;
+}
+
+.CommentsList ul li div:nth-child(2){
+  width: 100%;
+  margin-top: 40px;
+  padding-left: 10%;
+  border-bottom: 1px solid #eee;
+}

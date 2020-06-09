@@ -1,0 +1,15 @@
+.App{
+
+}
+.App .App_main{
+  height: 200px;
+  background-color: aliceblue;
+  display: flex;
+  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+}
+.App .App_main div:nth-child(1){
+  font-weight: 700;
+  font-size: 28px;
+}

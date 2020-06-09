@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <script
+            crossorigin
+            src="https://unpkg.com/react@16/umd/react.development.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+        ></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+        <title>react</title>
+    </head>
+    <body>
+        <div id="app"></div>
+    </body>
+</html>
+<script type="text/babel">
+    // jsx 指定， 不能不写
+    	var vDom = <h1>Hello, React!</h1>   // jsx 语法
+        ReactDOM.render(
+            vDom,  // 使用 ReactDOM.render 渲染插入到app内
+            document.getElementById('app')
+        );
+</script>

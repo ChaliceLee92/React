@@ -1,0 +1,53 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 06:47:41
+ * @lastTime: 2019-05-02 07:12:37
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+</body>
+</html>
+<script type="text/babel">
+  class MyComponent extends React.Component {
+    constructor(props) {
+        super(props)
+        this.showInput = this.showInput.bind(this)
+        this.handleBlur = this.handleBlur.bind(this)
+    }
+    render() {
+      return (
+        <div>
+          <input type='text' ref='content' /> // 官方不推荐使用
+          <input type='text' ref={input => this.input = input} /> 
+          <button onClick={this.showInput}>提交</button>  
+          <input onBlur={this.handleBlur} type='text' placeholder='请输入值'/>
+        </div>
+      )
+    }
+    showInput(){
+      // const input = this.refs.content   // 这种方式官方不推荐使用
+      // alert(input.value)
+      alert(this.input.value)
+    }
+    handleBlur(e){
+      alert(e.target.value)
+    }
+  }
+  ReactDOM.render(<MyComponent /> , document.getElementById('app'))
+</script>

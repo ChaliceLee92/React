@@ -1,0 +1,12 @@
+.Search{
+
+}
+.Search div:nth-child(1){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+.Search div:nth-child(1) input{
+  margin-right: 20px;
+}

@@ -1,0 +1,76 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 04:26:23
+ * @lastTime: 2019-05-02 04:51:18
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <title>React 组件的基本定义与使用</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div id="app"></div>
+  <div id="root1"></div>
+</body>
+
+</html>
+<script type="text/babel">
+  // 工厂函数组件（简单组件）
+  function Welcome(props) {
+    return <h1>Hello, {props.name}</h1>;
+  }
+
+  const element = <Welcome name="Sara" />;
+  ReactDOM.render(
+    element,
+    document.getElementById('root')
+  );
+
+  // ES6类组件(复杂组件)
+  class MyComponemt extends React.Component {
+    render () {
+      return <h1>Hello, {this.props.name}</h1>;
+    }
+  }
+  const element1 = <MyComponemt name="react" />;
+  ReactDOM.render(
+    element1,
+    document.getElementById('app')
+  );
+
+  // 组合组件
+  function Welcome1(props) {
+    return <h1>Hello, {props.name}</h1>;
+  }
+
+  function App() {
+    return (
+      <div>
+        <Welcome1 name="Sara" />
+        <Welcome1 name="Cahal" />
+        <Welcome1 name="Edite" />
+      </div>
+    );
+  }
+
+  ReactDOM.render(
+    <App />,
+    document.getElementById('root1')
+  );
+
+
+  
+</script>

@@ -1,0 +1,128 @@
+<!--
+ * @Author: ChaliceLee
+ * @Description: 
+ * @Github: 
+ * @Email: ChaliceLee92@163.com
+ * @LastAuthor: Please set LastEditors
+ * @Date: 2019-05-02 04:26:23
+ * @lastTime: 2019-05-02 06:36:55
+ -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+  <title>React 组件的基本定义与使用</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <div id="root1"></div>
+</body>
+
+</html>
+<script type="text/babel">
+  // class MyComponemt extends React.Component {
+  //    // 通过constructor 初始化状态
+  //     constructor(props) {
+  //       super(props)
+  //       this.state = {
+  //         isLike:false
+  //       }
+
+  //       // 将新增的方法中的this 指向强制绑定为组件对象
+  //       // bind 方法返回新的函数
+  //       this.handleClick = this.handleClick.bind(this)
+  //     }
+      
+  //     // 这个是新增的方法， this 指向的是undefined
+  //     handleClick(){
+  //       // 获取状态值
+  //       const isLike = !this.state.isLike
+  //       // 更新状态
+  //       this.setState({isLike})
+  //     }
+
+  //     // 重写组件类的方法，this 指向当前组件类 对象
+  //     render () {
+  //       // 获取state 状态值
+  //       const { isLike } = this.state
+  //       return <h1 onClick={this.handleClick}>{ isLike ? "你喜欢我" : "我喜欢你" }</h1>;
+  //     }
+  //  }
+  //  const element1 = <MyComponemt name="react" />;
+  //  ReactDOM.render(
+  //    element1,
+  //    document.getElementById('root')
+  //  );
+
+  //  function PersonInfo(props) {
+  //    const data = ['姓名','年龄','性别','爱好']
+  //    return <ul>
+  //             {
+  //               data.map((item,index) => {
+  //                 // console.log(props);
+  //                 return <li key= {index}>{item} : {props.props[index]}</li>
+  //               })
+  //             }
+  //           </ul>
+  //  }
+  //  const propsInfo = ['ChaliceLee' , '20' , 'man' , 'dance']
+  //  const element2 = <PersonInfo props={ propsInfo } />
+  //  ReactDOM.render(
+  //    element2,
+  //    document.getElementById('root1')
+  //  );
+
+
+
+  // function PersonInfo(props) {
+  //   return  <ul>
+  //             <li>姓名：{props.name} </li>
+  //             <li>年龄: {props.age}</li>
+  //             <li>性别: {props.sex}</li>
+  //           </ul>
+  // }
+
+    class PersonInfo extends React.Component {
+      render()  {
+        console.log(this);
+        return  <ul>
+                <li>姓名：{this.props.name} </li>
+                <li>年龄: {this.props.age}</li>
+                <li>性别: {this.props.sex}</li>
+              </ul>
+      }
+    }
+
+
+  // 设置默认值
+  PersonInfo.defaultProps = {
+    age:20,
+    sex:'男'
+  }
+
+  //指定属性类型与是否必传
+  PersonInfo.propTypes = {
+    name:PropTypes.string.isRequired
+  }
+
+
+
+  const propsInfo = {
+    name:'ChaliceLee'
+  }
+  
+  const element2 = <PersonInfo { ...propsInfo } />
+  ReactDOM.render(
+     element2,
+     document.getElementById('root1')
+  );
+
+ </script>

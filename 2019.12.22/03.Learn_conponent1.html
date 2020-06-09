@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+
+
+    <!-- 使用 PropTypes 进行类型检查 -->
+    <script src="https://cdn.bootcss.com/prop-types/15.7.2/prop-types.js"></script>
+
+
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+
+    <title>React 组件的基本定义与使用</title>
+</head>
+
+<body>
+    <div id="root"></div>
+    <div id="root1"></div>
+    <div id="root2"></div>
+    <div id="root3"></div>
+    <div id="root4"></div>
+    <div id="root5"></div>
+</body>
+
+</html>
+<script type="text/babel">
+
+    /**
+        组件的三大属性：
+                        1、state:
+                                    State 是组件对象最重要的属性，值是对象(可以包含多个数据)
+                                    组件被称为状态机，通过更新组件的state来更新对应的页面显示(重新渲染组件)
+
+                                    工厂模式定义组件和es6类定义组件， 这两种方式，区别在于， 只要组件有状态的情况下， 工厂模式没有用，只能够使用es6类来定义组件，但是工厂模式的效率比es6的高
+
+                                    2019.12.20 号update: 
+                                            Hook 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性。
+
+                        2、props
+
+                        3、ref 
+
+    */
+
+
+
+    //  state
+    class MyComponemt extends React.Component {
+        // 通过constructor 初始化状态
+        constructor(props) {
+            super(props)  //  通过super将props 传递到父类的构造函数中 Class 组件应该始终使用 props 参数来调用父类的构造函数。
+            this.state = {
+                isLike: false
+            }
+
+            // 将新增的方法中的this 指向强制绑定为组件对象
+            // bind 方法返回新的函数
+            this.handleClick = this.handleClick.bind(this)
+        }
+
+        // 这个是新增的方法， this 指向的是undefined
+        handleClick() {
+            // 获取状态值
+            const isLike = !this.state.isLike
+            // 更新状态
+            this.setState({ isLike })
+        }
+
+        // 重写组件类的方法，this 指向当前组件类 对象
+        render() {
+            // 获取state 状态值
+            const { isLike } = this.state
+            return <h1 onClick={this.handleClick}>{isLike ? "你喜欢我" : "我喜欢你"}</h1>;
+        }
+    }
+    const element1 = <MyComponemt name="react" />;
+    ReactDOM.render(
+        element1,
+        document.getElementById('root')
+    );
+
+
+    //  props  
+    function PersonInfo(props) {
+        const data = ['姓名', '年龄', '性别', '爱好']
+        return <ul>
+            {
+                data.map((item, index) => {
+                    return <li key={index}>{item} : {props.props[index]}</li>
+                })
+            }
+        </ul>
+    }
+    const propsInfo = ['ChaliceLee', '20', 'man', 'dance']
+    const element2 = <PersonInfo props={propsInfo} />  // 通过props 传递一个对象，key值是props 这个可以自己定义，但是使用的时候需要对应这个字段来取值
+    ReactDOM.render(
+        element2,
+        document.getElementById('root1')
+    );
+
+
+
+    //  默认props
+    function PersonInfo1(props) {
+        return <ul>
+            <li>姓名：{props.name} </li>
+            <li>年龄: {props.age}</li>
+            <li>性别: {props.sex}</li>
+        </ul>
+    }
+
+    // 设置默认值
+    PersonInfo1.defaultProps = {
+        age: 20,
+        sex: '男'
+    }
+
+    const propsInfo1 = {
+        name: 'ChaliceLee'
+    }
+
+    const element3 = <PersonInfo1 name={propsInfo1.name} />
+    ReactDOM.render(
+        element3,
+        document.getElementById('root2')
+    );
+
+
+    // 限定属性是否必传项和类型控制: 注意： 想要使用此功能必须引入一个库 ：https://react.docschina.org/docs/typechecking-with-proptypes.html
+
+    function PersonInfo2(props) {
+        console.log('%c 🥃 props: ', 'font-size:20px;background-color: #7F2B82;color:#fff;', props);
+        return <ul>
+            <li>姓名：{props.name} </li>
+            <li>年龄: {props.age}</li>
+            <li>性别: {props.sex}</li>
+        </ul>
+    }
+
+    // 设置默认值
+    PersonInfo2.defaultProps = {
+        age: 20,
+        sex: '男'
+    }
+
+    //指定属性类型与是否必传
+    PersonInfo2.propTypes = {   // 需要引入Prop-types库
+        name: PropTypes.string.isRequired
+    }
+
+
+
+    const propsInfo2 = {
+        name: "chalicelee"   //  要求传入字符串所以必须传入字符串而且不能为空
+    }
+
+    const element4 = <PersonInfo2 name={propsInfo2.name} />
+    ReactDOM.render(
+        element4,
+        document.getElementById('root3')
+    );
+
+
+    //  通过类的方式来创建组件
+    class PersonInfo3 extends React.Component {
+
+        // 在组件被创建的时候会自动调用 constructor构造函数
+        constructor(props) {
+            super(props)  // 调用父类的方法
+            this.state = {
+                a: '....'
+            }
+        }
+
+        render() {
+            console.log(this);
+            return <ul>
+                <li>姓名：{this.props.name} </li>
+                <li>年龄: {this.props.age}</li>
+                <li>性别: {this.props.sex}</li>
+            </ul>
+        }
+    }
+
+
+    // 设置默认值
+    PersonInfo3.defaultProps = {
+        age: 20,
+        sex: '女'
+    }
+
+    //指定属性类型与是否必传
+    PersonInfo3.propTypes = {
+        name: PropTypes.string.isRequired
+    }
+
+
+
+    const propsInfo3 = {
+        name: 'ss'
+    }
+
+    const element5 = <PersonInfo3 {...propsInfo3} />
+    ReactDOM.render(
+        element5,
+        document.getElementById('root4')
+    );
+
+
+
+
+    // ref操作 官方不推荐使用
+    class MyComponent1 extends React.Component {
+        constructor(props) {
+            super(props)
+            this.showInput = this.showInput.bind(this)
+            this.handleBlur = this.handleBlur.bind(this)
+        }
+        render() {
+            return (
+                <div>
+                    <input type='text' ref='content' />
+                    <input type='text' ref={input => {
+                        // input是input的dom实例
+                        this.input = input
+                    }} />
+                    <button onClick={this.showInput}>提交</button>
+                    <input onBlur={this.handleBlur} type='text' placeholder='请输入值' />
+                </div>
+            )
+        }
+        showInput() {
+            // const input = this.refs.content   // 这种方式官方不推荐使用
+        
+            console.log('%c 🍆 this.input.value: ', 'font-size:20px;background-color: #4b4b4b;color:#fff;', this.input.value);
+        }
+        handleBlur(e) {
+            alert(e.target.value)
+        }
+    }
+    ReactDOM.render(<MyComponent1 />, document.getElementById('root5'))
+
+
+    /**
+    
+        总结: 这三大特性比较重要: 1. state 2.props 3.ref
+    */
+
+</script>
